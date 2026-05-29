@@ -89,7 +89,7 @@ function TestimonialCard({ item }) {
             <h3 className="text-[1.5rem] font-medium leading-tight tracking-tighter text-white">
               {item.name}
             </h3>
-            <p className="mt-0.5 text-[1.3rem] font-medium leading-[1.05] tracking-tighter text-white/70">
+            <p className="mt-0.5 text-[1.3rem] leading-[1.05] tracking-tighter text-white/70">
               {item.role}
             </p>
           </div>
@@ -107,7 +107,7 @@ function TestimonialCard({ item }) {
           ))}
         </div>
 
-        <p className="text-[1.3rem] font-medium leading-[1.05] tracking-tighter text-white">
+        <p className="text-[1.3rem] leading-[1.05] tracking-tighter text-white">
           "{item.content}"
         </p>
       </div>
@@ -198,7 +198,7 @@ function HomeBrief() {
 
       <div className="mb-[8vh] grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
         <div className="md:col-span-8">
-          <h2 className="text-[1.5rem] font-semibold leading-[0.8] tracking-tighter text-black md:text-[2rem]">
+          <h2 className="font-semibold leading-[0.8] tracking-tighter text-black text-[2rem]">
             What I have
             done for Clients
           </h2>
@@ -220,7 +220,7 @@ function HomeBrief() {
     <section id="services" className="min-h-screen w-full bg-white px-10 py-10 font-sans text-black selection:bg-white/20 md:px-16">
         <div className="mb-[8vh] grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
         <div className="md:col-span-8">
-          <h2 className="text-[1.5rem] font-semibold leading-[0.8] tracking-tighter text-black md:text-[2rem]">
+          <h2 className="font-semibold leading-[0.8] tracking-tighter text-black text-[2rem]">
             What can I Provide
           </h2>
         </div>
@@ -388,7 +388,7 @@ function HomeBrief() {
 
       <div className="relative z-10 grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
         <div className="md:col-span-8">
-          <h2 className="text-[1.5rem] font-semibold leading-[0.8] tracking-tighter text-white md:text-[2rem]">
+          <h2 className="font-semibold leading-[0.8] tracking-tighter text-white text-[2rem]">
             What my clients say
           </h2>
         </div>

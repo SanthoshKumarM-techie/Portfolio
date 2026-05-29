@@ -1,18 +1,5 @@
 import React from 'react';
 import Iridescence from './components/Iridescence';
-import StaggeredMenu from './components/StaggeredMenu';
-
-const menuItems = [
-  { label: 'Home', ariaLabel: 'Go to home section', link: '#home' },
-  { label: 'Work', ariaLabel: 'View selected work', link: '#work' },
-  { label: 'Services', ariaLabel: 'View services', link: '#services' },
-  { label: 'Contact', ariaLabel: 'Get in touch', link: '#contact' },
-];
-
-const socialItems = [
-  { label: 'GitHub', link: 'https://github.com' },
-  { label: 'LinkedIn', link: 'https://linkedin.com' },
-];
 
 function Home() {
   return (
@@ -29,21 +16,6 @@ function Home() {
         {/* Subtle grid overlay */}
         <div className="absolute inset-0 bg-grid-white opacity-10"></div>
       </div>
-
-      <StaggeredMenu
-        position="right"
-        items={menuItems}
-        socialItems={socialItems}
-        displaySocials
-        displayItemNumbering
-        menuButtonColor="#ffffff"
-        openMenuButtonColor="#111111"
-        changeMenuColorOnOpen={true}
-        colors={['#B497CF', '#5227FF']}
-        logoText="Santhoshkumar"
-        accentColor="#5227FF"
-        isFixed
-      />
 
       {/* Main Framework Layout Container */}
       <main className="relative w-full h-full flex flex-col justify-end px-10 md:px-16 pb-[8vh] z-20">
