@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  base: './',
   plugins: [
     tailwindcss(),
   ],
