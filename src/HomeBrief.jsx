@@ -1,414 +1,612 @@
-import React from 'react'
-import { ArrowUpRight } from 'lucide-react'
-import { motion, useMotionValue, useSpring } from 'motion/react'
-import PixelBlast from './components/PixelBlast'
-import Beams from './components/Beams'
-import LogoLoop from './components/LogoLoop'
-
-const tiltSpring = {
-  damping: 30,
-  stiffness: 100,
-  mass: 2,
-}
-
-function ProjectCard({ project }) {
-  const rotateX = useSpring(useMotionValue(0), tiltSpring)
-  const rotateY = useSpring(useMotionValue(0), tiltSpring)
-  const scale = useSpring(1, tiltSpring)
-
-  function handleMouseMove(event) {
-    const rect = event.currentTarget.getBoundingClientRect()
-    const offsetX = event.clientX - rect.left - rect.width / 2
-    const offsetY = event.clientY - rect.top - rect.height / 2
-
-    rotateX.set((offsetY / (rect.height / 2)) * -6)
-    rotateY.set((offsetX / (rect.width / 2)) * 6)
-  }
-
-  function handleMouseEnter() {
-    scale.set(1.025)
-  }
-
-  function handleMouseLeave() {
-    scale.set(1)
-    rotateX.set(0)
-    rotateY.set(0)
-  }
-
-  return (
-    <article
-      className="group relative aspect-[4/3.05] [perspective:800px]"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <motion.div
-        className="relative h-full w-full overflow-hidden bg-white/10 [transform-style:preserve-3d]"
-        style={{ rotateX, rotateY, scale }}
-      >
-        <img
-          src={project.image}
-          alt={project.title}
-          className="h-full w-full object-cover opacity-85 transition duration-500 group-hover:opacity-100 [transform:translateZ(0)]"
-          loading="lazy"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent [transform:translateZ(18px)]" />
-
-        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-5 [transform:translateZ(32px)]">
-          <h3 className="max-w-[16rem] text-[1.5rem] font-medium leading-[0.98] tracking-tighter text-white">
-            {project.title}
-          </h3>
-
-        </div>
-      </motion.div>
-    </article>
-  )
-}
-
-function TestimonialCard({ item }) {
-  return (
-    <div className="group relative flex h-[360px] w-[360px] flex-col justify-between rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-zinc-700 hover:bg-zinc-900/70">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-      <div>
-        <div className="mb-6 flex items-center gap-4">
-          {item.avatarUrl ? (
-            <img
-              src={item.avatarUrl}
-              alt={item.name}
-              className="h-12 w-12 rounded-full object-cover ring-2 ring-zinc-800 transition-all duration-300 group-hover:ring-zinc-700"
-            />
-          ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-600/30 bg-gradient-to-br from-zinc-700 to-zinc-800 text-base font-semibold uppercase tracking-wide text-zinc-200">
-              {item.name.slice(0, 2)}
-            </div>
-          )}
-
-          <div className="flex flex-col">
-            <h3 className="text-[1.5rem] font-medium leading-tight tracking-tighter text-white">
-              {item.name}
-            </h3>
-            <p className="mt-0.5 text-[1.3rem] leading-[1.05] tracking-tighter text-white/70">
-              {item.role}
-            </p>
-          </div>
-        </div>
-
-        <div className="mb-5 flex gap-1">
-          {[...Array(item.rating)].map((_, i) => (
-            <svg
-              key={i}
-              className="h-4 w-4 fill-current text-amber-500 drop-shadow-[0_0_4px_rgba(245,158,11,0.3)]"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </svg>
-          ))}
-        </div>
-
-        <p className="text-[1.3rem] leading-[1.05] tracking-tighter text-white">
-          "{item.content}"
-        </p>
-      </div>
-    </div>
-  )
-}
+import React, { useRef } from 'react'
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Quote } from 'lucide-react';
+import SCBG1 from './assets/SCBG1.jpg'
+import SCBG2 from './assets/SCBG2.jpg'
+import SCBG3 from './assets/SCBG3.jpg'
+import code from './assets/code.jpg'
+import CTA from './CTA';
+import { ArrowUpRight, ArrowRight } from 'lucide-react';
 
 function HomeBrief() {
   const projects = [
-    {
-      id: 1,
-      title: 'Crypto Mobile Wallet',
-      image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=900&q=80',
-    },
-    {
-      id: 2,
-      title: 'SaaS Analytics Dashboard',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80',
-    },
-    {
-      id: 3,
-      title: 'Minimalist E-Commerce Platform',
-      image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=900&q=80',
-    },
-    {
-      id: 4,
-      title: 'AI Copywriting Assistant UI',
-      image: 'https://images.unsplash.com/photo-1618005198143-e5283b519a7f?auto=format&fit=crop&w=900&q=80',
-    },
-    {
-      id: 5,
-      title: 'Neo-Brutalist Branding System',
-      image: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=900&q=80',
-    },
-    {
-      id: 6,
-      title: 'Spatial Computing Interface',
-      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=900&q=80',
-    },
-  ]
+    { id: 1, title: "Project One", bg: "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800')" },
+    { id: 2, title: "Project Two", bg: "url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800')" },
+    { id: 3, title: "Project Three", bg: "url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=800')" },
+    { id: 4, title: "Project Four", bg: "url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800')" },
+  ];
 
+  const UIUXservices = [
+    "Website UI/UX Design",
+    "Mobile App Design",
+    "Web Application Design",
+    "Landing Page Design", 
+    "Website Redesign",
+    "Dashboard & Admin Panel Design"
+  ];
+
+  const FWDservices = [
+    "Business Website Development",
+    "Landing Page Development",
+    "Website Redesign",
+    "Portfolio Website Development", 
+    "Responsive Website Development",
+    "Interactive Web Experiences"
+  ];
+
+  const GDservices = [
+    "Social Media Design",
+    "Marketing & Promotional Materials",
+    "Print Design",
+  ];
+
+  // --- Testimonials Data Dictionary ---
   const testimonials = [
     {
       id: 1,
-      name: "Santhoshkumar",
-      role: "founder",
-      avatarUrl: "", // Add image path if available, defaults to initials placeholder
-      rating: 5,
-      content: "Santhosh has delivered the project on the time and i love the way he communicate with and done the work with very super way and amazing work"
+      name: "Vigneshwaran",
+      role: "Working Professional",
+      quote: "Santhosh is a talented designer who delivered exceptional results for our project. His attention to detail and creative approach made all the difference."
     },
     {
       id: 2,
-      name: "Santhoshkumar",
-      role: "founder",
-      avatarUrl: "",
-      rating: 5,
-      content: "Santhosh has delivered the project on the time and i love the way he communicate with and done the work with very super way and amazing work"
+      name: "Anjali Sharma",
+      role: "Product Manager",
+      quote: "Working with Santhosh was seamless. He took our complex dashboard concepts and transformed them into clean, highly intuitive interfaces."
     },
     {
       id: 3,
-      name: "Santhoshkumar",
-      role: "founder",
-      avatarUrl: "",
-      rating: 5,
-      content: "Santhosh has delivered the project on the time and i love the way he communicate with and done the work with very super way and amazing work"
+      name: "David Miller",
+      role: "Startup Founder",
+      quote: "Incredible speed and precision. The frontend experience he developed is exceptionally fast, fully responsive, and precisely matches our design files."
     },
-  {
-      id: 3,
-      name: "Santhoshkumar",
-      role: "founder",
-      avatarUrl: "",
-      rating: 5,
-      content: "Santhosh has delivered the project on the time and i love the way he communicate with and done the work with very super way and amazing work"
+    {
+      id: 4,
+      name: "Rajesh Kumar",
+      role: "Marketing Director",
+      quote: "Our landing page conversion rate increased dramatically after the redesign. Santhosh has a true gift for blending marketing intent with gorgeous UI."
     },
-  {
-      id: 3,
-      name: "Santhoshkumar",
-      role: "founder",
-      avatarUrl: "",
-      rating: 5,
-      content: "Santhosh has delivered the project on the time and i love the way he communicate with and done the work with very super way and amazing work"
-    }]
+    {
+      id: 5,
+      name: "Emily Watson",
+      role: "E-commerce Owner",
+      quote: "Outstanding attention to visual branding elements. The social assets and matching web graphics perfectly captured our premium brand identity."
+    },
+    {
+      id: 6,
+      name: "Arjun Mehta",
+      role: "Tech Lead",
+      quote: "Santhosh brings a rare combination of pure visual creative design skills backed by reliable structural frontend execution code. Highly recommended."
+    }
+  ];
 
+  // Services Premium Section Animation Variants
+  const bgRevealVariants = {
+    hidden: { height: "0%" },
+    visible: { 
+      height: "100%",
+      transition: { duration: 1.1, ease: [0.25, 1, 0.5, 1] }
+    }
+  };
 
-  return (
-    <div>
-    <section id="work" className="min-h-screen w-full bg-white px-10 py-10 pt-15 font-sans text-black selection:bg-white/20 md:px-16">
+  const contentContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.5 
+      }
+    }
+  };
 
-      <div className="mb-[8vh] grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
-        <div className="md:col-span-8">
-          <h2 className="font-semibold leading-[0.8] tracking-tighter text-black text-[2rem]">
-            What I have
-            done for Clients
-          </h2>
-        </div>
+  const titleLeftVariants = {
+    hidden: { opacity: 0, x: "-100%" },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] } 
+    }
+  };
 
-      </div>
+  const itemRightVariants = {
+    hidden: { opacity: 0, x: "100%" },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] } 
+    }
+  };
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
-
-      <div className="mt-[5vh] flex items-center justify-end gap-2 text-[1.3rem] font-normal tracking-tighter text-black">
-        <p>View More</p>
-      </div>
-    </section>
-
-    <section id="services" className="min-h-screen w-full bg-white px-10 py-10 font-sans text-black selection:bg-white/20 md:px-16">
-        <div className="mb-[8vh] grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
-        <div className="md:col-span-8">
-          <h2 className="font-semibold leading-[0.8] tracking-tighter text-black text-[2rem]">
-            What can I Provide
-          </h2>
-        </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {/* Service Card 1: Frontend Web Development */}
-          <div className='relative overflow-hidden bg-black text-white'>
-  <div className="absolute inset-0 z-0 opacity-70">
-    <PixelBlast
-      variant="square"
-      pixelSize={4}
-      color="#B497CF"
-      patternScale={2}
-      patternDensity={1}
-      pixelSizeJitter={0}
-      enableRipples
-      rippleSpeed={0.4}
-      rippleThickness={0.12}
-      rippleIntensityScale={1.5}
-      liquid={false}
-      liquidStrength={0.12}
-      liquidRadius={1.2}
-      liquidWobbleSpeed={5}
-      speed={0.5}
-      edgeFade={0.25}
-      transparent
-    />
-  </div>
-  <div className="absolute inset-0 z-[1] bg-black/65" />
-
-  <div className='relative z-10 p-6'>
-    <h1 className='font-medium text-[1.5rem] tracking-tighter mb-7'>Frontend Web Development</h1>
-    <p className='tracking-tighter text-white/80 mb-7 text-[1.3rem] leading-0.8'>
-      Building responsive and visually engaging websites with modern frontend technologies and user-centered design.
-    </p>
-  </div>
+  // Scroll Target Reference for the expansion section
+  const expandSectionRef = useRef(null);
   
-  {/* Modern & Creative Interactive UI Mockup Canvas */}
-{/* The background container - Utilizes full 450px height with immersive content */}
-<div className="relative z-10 h-[450px] w-full flex items-center justify-center bg-transparent relative overflow-hidden group p-6 select-none pointer-events-none">
-  
-  {/* Modern Technical Grid Background Layer */}
-  <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40 group-hover:opacity-60 transition-opacity duration-700" />
+  const { scrollYProgress } = useScroll({
+    target: expandSectionRef,
+    offset: ["start start", "end end"]
+  });
 
-  {/* Vibrant Ambient Glow Effects */}
-  <div className="absolute top-12 left-12 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] transition-all duration-700 group-hover:bg-blue-500/20 group-hover:scale-110" />
-  <div className="absolute bottom-12 right-12 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] transition-all duration-700 group-hover:bg-purple-500/20 group-hover:scale-110" />
+  // Smoothly maps scroll progression to dimension properties
+  const cardWidth = useTransform(scrollYProgress, [0, 0.85], ["37.5rem", "100%"]);
+  const cardHeight = useTransform(scrollYProgress, [0, 0.85], ["25rem", "100vh"]);
+  const cardBorderRadius = useTransform(scrollYProgress, [0, 0.75], ["8px", "0px"]);
 
-  {/* Inner Filling Content Wrapper */}
-  <div className="relative w-full h-full max-w-xl flex items-center justify-center">
-    
-    {/* 1. Code Editor Glass Panel (Fills Left/Center background) */}
-    <div className="absolute left-0 top-8 w-[65%] h-[75%] bg-neutral-900/40 backdrop-blur-md border border-white/5 rounded-2xl p-5 shadow-2xl transition-all duration-500 ease-out group-hover:border-white/10 group-hover:bg-neutral-900/60 group-hover:-translate-y-2 group-hover:-translate-x-2">
-      {/* Window Header */}
-      <div className="flex items-center justify-between mb-5 border-b border-white/5 pb-3">
-        <div className="flex gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/40 group-hover:bg-red-500/70 transition-colors" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40 group-hover:bg-yellow-500/70 transition-colors" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/40 group-hover:bg-green-500/70 transition-colors" />
-        </div>
-        <div className="text-[10px] font-mono text-white/20 tracking-wider group-hover:text-white/40 transition-colors">App.tsx</div>
-      </div>
-      
-      {/* Code Blocks mimicking full layout */}
-      <div className="space-y-3 font-mono text-[11px] leading-relaxed">
-        <div className="flex items-center gap-2">
-          <span className="text-purple-400/70">import</span>
-          <span className="text-blue-400/80">React,</span>
-          <span className="text-blue-400/40">{"{ useState }"}</span>
-          <span className="text-purple-400/70">from</span>
-          <span className="text-green-400/60">'react'</span>
-        </div>
-        <div className="h-[1px] w-full bg-white/5" />
-        <div className="space-y-2 pl-2">
-          <div className="h-3.5 w-32 bg-white/5 rounded-md" />
-          <div className="flex items-center gap-1.5">
-            <span className="text-purple-400/70">return</span>
-            <span className="text-amber-400/60">(</span>
-          </div>
-          <div className="space-y-1.5 pl-4 border-l border-white/5">
-            <div className="h-3.5 w-44 bg-blue-500/10 border border-blue-500/10 rounded-md" />
-            <div className="h-3.5 w-28 bg-white/5 rounded-md" />
-            <div className="h-3.5 w-36 bg-purple-500/10 border border-purple-500/10 rounded-md" />
-          </div>
-        </div>
-      </div>
-    </div>
+  // --- Scroll References for About Text Tracking ---
+  const aboutScrollRef = useRef(null);
+  const { scrollYProgress: aboutProgress } = useScroll({
+    target: aboutScrollRef,
+    offset: ["start start", "end end"]
+  });
 
-    {/* 2. Live UI Web Preview Card (Fills Right/Foreground) */}
-    <div className="absolute right-0 bottom-8 w-[55%] h-[65%] bg-gradient-to-br from-neutral-900 to-neutral-950 border border-white/10 rounded-2xl p-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out group-hover:border-purple-500/30 group-hover:translate-y-[-12px] group-hover:translate-x-4 group-hover:shadow-purple-500/5">
-      {/* Component Header Browser Simulation */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-purple-500/20">
-          ✨
-        </div>
-        <div className="space-y-1.5 flex-1">
-          <div className="h-2.5 w-20 bg-white/80 rounded-full" />
-          <div className="h-1.5 w-12 bg-white/30 rounded-full" />
-        </div>
-        <div className="h-5 w-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-[9px] font-mono text-white/40">
-          v2.0
-        </div>
-      </div>
-      
-      {/* Dynamic Content Frame */}
-      <div className="h-[calc(100%-44px)] rounded-xl bg-white/[0.01] border border-white/5 p-3 flex flex-col justify-between">
-        {/* Mock Graphical Data/Hero Area */}
-        <div className="relative w-full h-20 rounded-lg bg-gradient-to-br from-blue-500/5 to-purple-500/5 border border-white/5 overflow-hidden flex items-center justify-center">
-          {/* Animated decorative grid lines inside the preview component */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="h-6 w-24 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[9px] text-white/60 font-medium tracking-wide">Live Preview</span>
-          </div>
-        </div>
+  const text1Color = useTransform(aboutProgress, [0, 0.25], ["rgba(255,255,255,0.25)", "rgba(255,255,255,1)"]);
+  const text2Color = useTransform(aboutProgress, [0.2, 0.55], ["rgba(255,255,255,0.25)", "rgba(255,255,255,1)"]);
+  const text3Color = useTransform(aboutProgress, [0.5, 0.85], ["rgba(255,255,255,0.25)", "rgba(255,255,255,1)"]);
 
-        {/* Bottom Interactive Row Simulation */}
-        <div className="flex justify-between items-center pt-2">
-          <div className="space-y-1">
-            <div className="h-2 w-16 bg-white/40 rounded-full" />
-            <div className="h-1.5 w-8 bg-white/20 rounded-full" />
-          </div>
-          {/* Mock Interactive Switch Switcher */}
-          <div className="h-4.5 w-8 rounded-full bg-neutral-800 p-0.5 flex justify-start group-hover:justify-end transition-all duration-300 ease-out border border-white/5">
-            <div className="h-3.5 w-3.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 shadow-md shadow-purple-500/50" />
-          </div>
-        </div>
-      </div>
-    </div>
+  const aboutRevealVariants = {
+    hidden: { y: 60, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1, 
+      transition: { duration: 1, ease: [0.25, 1, 0.5, 1] } 
+    }
+  };
 
-    {/* 3. Floating Micro-Tech Badges for Depth */}
-    <div className="absolute top-16 right-8 bg-neutral-900/60 border border-white/5 text-[10px] font-mono text-blue-400/60 px-2.5 py-1 rounded-md backdrop-blur-sm shadow-md transition-all duration-500 group-hover:-translate-y-2 group-hover:text-blue-400 group-hover:border-blue-500/20">
-      {"<Flex />"}
-    </div>
-    <div className="absolute bottom-16 left-6 bg-neutral-900/60 border border-white/5 text-[10px] font-mono text-purple-400/60 px-2.5 py-1 rounded-md backdrop-blur-sm shadow-md transition-all duration-500 group-hover:translate-y-2 group-hover:text-purple-400 group-hover:border-purple-500/20">
-      {"gap-4"}
-    </div>
-    
-  </div>
-</div>
-</div>
+  // --- Viewport Entry Animation for Testimonials Block ---
+  const testimonialContainerVariants = {
+    hidden: { opacity: 0, y: 48 },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: [0.25, 1, 0.5, 1] } 
+    }
+  };
+
+  // REFACTORED: Utilizes Framer Motion whileHover definitions to handle smooth hardware scaling + lift simultaneously
+  const renderTestimonialCard = (item, key) => (
+    <motion.div 
+      key={key}
+      className="testimonial-card relative h-100 w-85 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-black select-none cursor-pointer"
+      whileHover={{ 
+        scale: 1.04, 
+        y: -8, 
+        borderColor: "rgba(255, 255, 255, 0.25)",
+        zIndex: 10
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
+      <div className="absolute inset-0 testimonial-stars" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(83,56,255,0.55),transparent_36%),linear-gradient(155deg,rgba(38,0,191,0.85),rgba(0,0,0,0.18)_48%,rgba(0,0,0,0.78))]" />
+      <div className="absolute inset-0 bg-black/10" />
+
+      <div className="relative z-10 flex h-full flex-col justify-between">
+        <div className="p-5 pb-0">
+          <Quote className="h-15 w-15 text-white/45" aria-hidden="true" />
         </div>
 
         <div>
-          <p className="mt-[5vh] flex items-center justify-end gap-2 text-[1.3rem] font-normal tracking-tighter text-black">let's work Together</p>
+          <p className="p-5 text-md leading-tight tracking-tighter text-white">
+            "{item.quote}"
+          </p>
+          <div className='flex gap-3 items-center p-5'>
+            <div className='w-12 h-12 rounded-full bg-gradient-to-br from-white to-white/55 ring-2 ring-white/30'></div>
+            <div>
+              <p className='text-lg text-white font-semibold tracking-tighter'>{item.name}</p>
+              <p className='text-sm text-white/70 tracking-tighter'>{item.role}</p>
+            </div>
+          </div>
         </div>
-    </section>
-
-    <section id="contact" className="relative flex min-h-screen w-full flex-col overflow-hidden bg-black px-10 py-10 font-sans text-white selection:bg-white/20 md:px-16">
-      <div className="absolute inset-0 z-0">
-        <Beams
-          beamWidth={3}
-          beamHeight={30}
-          beamNumber={20}
-          lightColor="#ffffff"
-          speed={2}
-          noiseIntensity={1.75}
-          scale={0.2}
-          rotation={30}
-        />
       </div>
+    </motion.div>
+  );
 
-      <div className="absolute inset-0 z-[1] bg-black/45" />
+  return (
+    <div>
+      {/* SECTION 1: UNTOUCHED */}
+      <section className="min-h-screen bg-white px-5 py-12 text-black md:px-10">
+        <h1 className="mb-8 text-3xl font-semibold tracking-tighter">What I have done for clients</h1>
+        
+        <div className="grid gap-5 md:grid-cols-2">
+          {projects.map((project, index) => {
+            const isSecondInRow = index % 2 !== 0;
 
-      <div className="relative z-10 grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-16">
-        <div className="md:col-span-8">
-          <h2 className="font-semibold leading-[0.8] tracking-tighter text-white text-[2rem]">
-            What my clients say
-          </h2>
+            const revealVariants = {
+              hidden: { height: "0%" },
+              visible: { 
+                height: "100%",
+                transition: { 
+                  duration: 1.2, 
+                  ease: [0.25, 1, 0.5, 1],
+                  delay: isSecondInRow ? 0.35 : 0 
+                }
+              }
+            };
+
+            return (
+              <motion.div 
+                key={project.id} 
+                className="relative h-120 w-full bg-white rounded-lg"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 w-full overflow-hidden rounded-lg"
+                  variants={revealVariants}
+                >
+                  <div 
+                    className="absolute top-0 left-0 w-full h-120 bg-cover bg-center p-6 flex flex-col justify-end text-white"
+                    style={{ 
+                      backgroundImage: project.bg,
+                      width: '100%' 
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black/30 z-0" />
+
+                    <div className="relative z-10">
+                      <h3 className="text-2xl font-bold tracking-tight">{project.title}</h3>
+                      <p className="text-sm text-gray-200 mt-1">View Case Study</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
         </div>
-        </div>
-        <div className="relative z-10 -mx-10 flex flex-1 items-center md:-mx-16">
-          <LogoLoop
-            logos={testimonials}
-            speed={70}
-            direction="left"
-            gap={24}
-            logoHeight={360}
-            pauseOnHover
-            fadeOut
-            fadeOutColor="#000000"
-            ariaLabel="Client testimonials"
-            className="w-full"
-            renderItem={(item) => <TestimonialCard item={item} />}
+      </section>
+
+      {/* SECTION 2: UNTOUCHED SERVICES SECTIONS */}
+      <section className='min-h-screen bg-white px-5 py-12 text-black md:px-10 '>
+        <h1 className="mb-8 text-3xl font-semibold tracking-tighter">What I can provide</h1>
+        
+        <motion.div 
+          className='relative w-full rounded-lg overflow-hidden shadow-sm mb-10'
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <motion.div 
+            className="absolute bottom-0 left-0 right-0 w-full bg-cover bg-center rounded-lg"
+            style={{ backgroundImage: `url(${SCBG1})` }}
+            variants={bgRevealVariants}
           />
+
+          <motion.div 
+            className='relative z-10 p-6 flex flex-col md:flex-row justify-between items-stretch gap-12'
+            variants={contentContainerVariants}
+          >
+            <div className="overflow-hidden flex items-start">
+              <motion.h2 
+                className='text-3xl font-semibold tracking-tight text-white py-1'
+                variants={titleLeftVariants}
+              >
+                UI/UX Design
+              </motion.h2>
+            </div>
+
+            <div className="flex-1 max-w-xl w-full flex flex-col justify-center">
+              {UIUXservices.map((service, index) => (
+                <div key={index} className="w-full">
+                  <div className="overflow-hidden py-3">
+                    <motion.div 
+                      className='text-xl tracking-tight font-medium text-white'
+                      variants={itemRightVariants}
+                    >
+                      {service}
+                    </motion.div>
+                  </div>
+                  {index < UIUXservices.length - 1 && (
+                    <hr className='border-white/50' />
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className='relative w-full rounded-lg overflow-hidden shadow-sm mb-10'
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <motion.div 
+            className="absolute bottom-0 left-0 right-0 w-full bg-cover bg-center rounded-lg"
+            style={{ backgroundImage: `url(${SCBG2})` }}
+            variants={bgRevealVariants}
+          />
+
+          <motion.div 
+            className='relative z-10 p-6 flex flex-col md:flex-row justify-between items-stretch gap-12'
+            variants={contentContainerVariants}
+          >
+            <div className="overflow-hidden flex items-start">
+              <motion.h2 
+                className='text-3xl font-semibold tracking-tight text-white py-1'
+                variants={titleLeftVariants}
+              >
+                Frontend Web Development
+              </motion.h2>
+            </div>
+
+            <div className="flex-1 max-w-xl w-full flex flex-col justify-center">
+              {FWDservices.map((service, index) => (
+                <div key={index} className="w-full">
+                  <div className="overflow-hidden py-3">
+                    <motion.div 
+                      className='text-xl tracking-tight font-medium text-white'
+                      variants={itemRightVariants}
+                    >
+                      {service}
+                    </motion.div>
+                  </div>
+                  {index < FWDservices.length - 1 && (
+                    <hr className='border-white/50' />
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className='relative w-full rounded-lg overflow-hidden shadow-sm mb-10'
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <motion.div 
+            className="absolute bottom-0 left-0 right-0 w-full bg-cover bg-center rounded-lg"
+            style={{ backgroundImage: `url(${SCBG3})` }}
+            variants={bgRevealVariants}
+          />
+
+          <motion.div 
+            className='relative z-10 p-6 flex flex-col md:flex-row justify-between items-stretch gap-12'
+            variants={contentContainerVariants}
+          >
+            <div className="overflow-hidden flex items-start">
+              <motion.h2 
+                className='text-3xl font-semibold tracking-tight text-white py-1'
+                variants={titleLeftVariants}
+              >
+                Graphic Designing
+              </motion.h2>
+            </div>
+
+            <div className="flex-1 max-w-xl w-full flex flex-col justify-center">
+              {GDservices.map((service, index) => (
+                <div key={index} className="w-full">
+                  <div className="overflow-hidden py-3">
+                    <motion.div 
+                      className='text-xl tracking-tight font-medium text-white'
+                      variants={itemRightVariants}
+                    >
+                      {service}
+                    </motion.div>
+                  </div>
+                  {index < GDservices.length - 1 && (
+                    <hr className='border-white/50' />
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* SECTION 3: UNTOUCHED SCROLL-EXPANDING MASK */}
+      <section ref={expandSectionRef} className="relative h-[200vh] bg-white">
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+          <motion.div
+            className='relative overflow-hidden bg-black flex items-center justify-center'
+            style={{ 
+              width: cardWidth,
+              height: cardHeight,
+              borderRadius: cardBorderRadius
+            }}
+          >
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-screen w-screen bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${code})` }}
+            />
+            
+            <p className='relative z-10 text-white text-5xl font-semibold tracking-tight text-center px-6 select-none mix-blend-difference'>
+              #WhereQualityMeetsCommitment
+            </p>
+          </motion.div>
         </div>
+      </section>
+
+      {/* SECTION 4: UNTOUCHED INTRO/ABOUT SECTIONS WITH SCROLL-HIGHLIGHT & LOCKING */}
+      <section ref={aboutScrollRef} className="relative h-[250vh] bg-black">
+        <div className="sticky top-0 h-screen w-full px-5 py-12 md:px-10 flex flex-col items-stretch justify-center overflow-hidden">
+          <h1 className='absolute top-12 left-5 md:left-10 text-3xl font-semibold tracking-tighter text-white select-none'>
+            Let me Introduce Myself
+          </h1>
+
+          <div className="overflow-hidden self-center mt-15">
+            <motion.div 
+              className="w-200 p-10 max-w-4xl"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={aboutRevealVariants}
+            >
+              <motion.h2 
+                className='text-3xl font-medium tracking-tighter mb-5 font-sans'
+                style={{ color: text1Color }}
+              >
+                I am Santhoshkumar Muralidharan,
+              </motion.h2>
+              
+              <motion.p 
+                className='text-2xl leading-tight tracking-tighter font-light mb-6 font-sans'
+                style={{ color: text2Color }}
+              >
+                As a third-year undergraduate student and passionate designer, I specialize in creating modern, visually engaging, and user-focused digital experiences. I enjoy transforming ideas into meaningful designs that not only look great but also communicate effectively and create lasting impressions. Every project I take on is driven by quality, attention to detail, and a strong commitment to delivering the best possible outcome.
+              </motion.p>
+
+              <motion.p 
+                className='text-2xl leading-tight tracking-tighter font-light font-sans'
+                style={{ color: text3Color }}
+              >
+                I believe great design is about more than aesthetics—it's about understanding goals, solving problems, and creating experiences that connect with people. While I continue to grow and refine my skills, I bring professionalism, creativity, and dedication to every project. My goal is simple: to help clients bring their vision to life through high-quality design and reliable collaboration.
+              </motion.p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* MODIFIED FINAL SECTION: TESTIMONIALS SLIDE-UP + ENDLESS SCROLL + SCROLL PAUSE & ZOOM HOVER */}
+      <section className='min-h-screen bg-black px-5 py-12 md:px-10 overflow-hidden flex flex-col justify-center'>
+         <h1 className="text-3xl font-semibold tracking-tighter text-white mb-15">What My Clients Says</h1>
+
+         {/* Entry slide-up container matching your exact viewport mask pattern */}
+         <motion.div 
+           className="relative w-full overflow-hidden"
+           initial="hidden"
+           whileInView="visible"
+           viewport={{ once: true, amount: 0.15 }}
+           variants={testimonialContainerVariants}
+         >
+           {/* Cleaned layout styles for marquee container tracking */}
+           <style dangerouslySetInnerHTML={{__html: `
+             @keyframes marquee {
+               0% { transform: translate3d(0, 0, 0); }
+               100% { transform: translate3d(-50%, 0, 0); }
+             }
+             .animate-marquee-infinite {
+               display: flex;
+               width: max-content;
+               animation: marquee 45s linear infinite;
+               will-change: transform;
+               transform: translate3d(0, 0, 0);
+             }
+             .animate-marquee-infinite:hover {
+               animation-play-state: paused;
+             }
+             .testimonial-card {
+               contain: layout paint;
+             }
+             @keyframes testimonial-star-drift {
+               0% {
+                 background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+               }
+               100% {
+                 background-position: 72px -144px, -96px -192px, 118px -236px, -84px -168px, 132px -264px, 0 0;
+               }
+             }
+             @keyframes testimonial-star-twinkle {
+               0%, 100% { opacity: 0.22; transform: translate3d(0, 0, 0) scale(1); }
+               50% { opacity: 0.68; transform: translate3d(10px, -14px, 0) scale(1.04); }
+             }
+             .testimonial-stars {
+               background-image:
+                 radial-gradient(circle at 14% 18%, rgba(255,255,255,0.95) 0 1px, transparent 1.4px),
+                 radial-gradient(circle at 72% 22%, rgba(255,255,255,0.75) 0 1px, transparent 1.5px),
+                 radial-gradient(circle at 42% 62%, rgba(255,255,255,0.8) 0 1px, transparent 1.5px),
+                 radial-gradient(circle at 84% 74%, rgba(255,255,255,0.65) 0 1px, transparent 1.5px),
+                 radial-gradient(circle at 26% 82%, rgba(255,255,255,0.7) 0 1px, transparent 1.5px),
+                 radial-gradient(ellipse at bottom, #262626 0%, #000 72%);
+               background-size: 72px 72px, 96px 96px, 118px 118px, 84px 84px, 132px 132px, 100% 100%;
+               opacity: 0.95;
+               animation: testimonial-star-drift 26s linear infinite;
+               will-change: background-position;
+             }
+             .testimonial-stars::after {
+               content: "";
+               position: absolute;
+               inset: 0;
+               background-image:
+                 radial-gradient(circle at 18% 28%, rgba(255,255,255,0.95) 0 1.5px, transparent 2px),
+                 radial-gradient(circle at 58% 14%, rgba(255,255,255,0.8) 0 1px, transparent 1.7px),
+                 radial-gradient(circle at 78% 58%, rgba(255,255,255,0.9) 0 1.4px, transparent 2px),
+                 radial-gradient(circle at 35% 76%, rgba(255,255,255,0.75) 0 1px, transparent 1.8px);
+               background-size: 160px 160px, 132px 132px, 190px 190px, 145px 145px;
+               animation: testimonial-star-twinkle 4.8s ease-in-out infinite;
+               pointer-events: none;
+             }
+           `}} />
+
+           {/* Infinite Scroller Track Box */}
+           <div className="animate-marquee-infinite flex gap-6 py-6 items-center">
+             {[...testimonials, ...testimonials].map((item, index) =>
+               renderTestimonialCard(item, `${index < testimonials.length ? 'first' : 'second'}-${item.id}`)
+             )}
+           </div>
+         </motion.div>
+      </section>
       
+      <section className="w-full bg-[#f6f6f6] text-black px-5 py-10 md:px-10 overflow-hidden select-none">
+      <div className="mx-auto max-w-5xl">
+
+        {/* Main Editorial Layout Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          
+          {/* Large Typographic Header Statement */}
+          <div className="lg:col-span-8">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-medium tracking-tighter leading-[1.08] text-neutral-900">
+              Have a structural vision? Let’s map out a execution strategy and{' '}
+              <span className="relative inline-block font-serif italic text-neutral-800">
+                build it together.
+                <motion.span 
+                  className="absolute bottom-1 left-0 h-[2px] bg-black/10 w-full origin-left"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                />
+              </span>
+            </h2>
+          </div>
+
+          {/* Subtext Description Block */}
+          <div className="lg:col-span-4 lg:mt-3">
+            <p className="text-sm tracking-tighter text-neutral-500 leading-relaxed max-w-sm">
+              Open to new projects in frontend development, UI/UX design, and graphic design. From responsive websites and digital products to brand visuals and marketing assets, I help transform ideas into polished and impactful experiences. 
+            </p>
+          </div>
+
+        </div>
+
+        {/* The Single Focal Navigation Button Layer */}
+        <div className="mt-16 md:mt-24 w-full">
+          <motion.a
+            href="/contact" // Update this path to match your Routing structure (e.g., if using react-router-dom, change to a Link component)
+            className="group relative flex w-full items-center justify-between rounded-full border border-black/10 bg-white p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.01)] overflow-hidden"
+            whileHover="hover"
+            whileTap={{ scale: 0.995 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          >
+            {/* Liquid Expansion Fill Hover Layer */}
+            <motion.div 
+              className="absolute inset-0 bg-neutral-950 z-0 rounded-full"
+              initial={{ y: "101%" }}
+              variants={{ hover: { y: 0 } }}
+              transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.5 }}
+            />
+
+            {/* Interactive Inner Labels */}
+            <span className="relative z-10 text-xl md:text-2xl font-medium tracking-tighter text-neutral-900 group-hover:text-white transition-colors duration-400 pl-2">
+              Let's Start a Project
+            </span>
+
+            {/* Kinetic Arrow Container */}
+            <div className="relative z-10 flex items-center gap-3 pr-2">
+              <span className="hidden sm:inline text-xs font-mono tracking-wider text-neutral-400 group-hover:text-neutral-500 transition-colors duration-400">
+                GO TO CONTACT
+              </span>
+              <motion.div 
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-neutral-50 border border-black/5 group-hover:border-white/10 group-hover:bg-white/10 flex items-center justify-center transition-colors duration-400"
+                variants={{ hover: { x: 4 } }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <ArrowRight className="h-5 w-5 text-neutral-600 group-hover:text-white transition-colors duration-400" />
+              </motion.div>
+            </div>
+          </motion.a>
+        </div>
+
+      </div>
     </section>
     </div>
   )

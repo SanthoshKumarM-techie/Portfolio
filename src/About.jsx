@@ -1,117 +1,164 @@
-import React from 'react'
-import { Rotate3D } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Check } from 'lucide-react'
 import ColorBends from './components/ColorBends'
+import Silk from './components/Silk'
 import { StarsBackground } from './components/Stars'
-
-const toolCards = [
-  {
-    title: 'Frontend Development',
-    description:
-      'Building fast, responsive, and interactive web experiences with modern frontend technologies and clean development practices',
-    skills: ['HTML5', 'CSS3', 'Javascript', 'React.js', 'Tailwind CSS'],
-  },
-  {
-    title: 'UI/UX & Design',
-    description:
-      'Designing intuitive and visually engaging interfaces focused on user experience, clarity, and usability.',
-    skills: ['UX Research', 'UI Design', 'Wireframing', 'User-Centered Design'],
-  },
-  {
-    title: 'Tools & Workflow',
-    description:
-      'Using modern development tools and streamlined workflows to ensure efficient collaboration, clean code management, and smooth deployment.',
-    skills: ['Git & GitHub', 'VS Code', 'Netlify / Vercel'],
-  },
-]
+import darkThemeImage from './assets/Dark theme image.jpg'
 
 const lifecycleSteps = [
   {
     id: 1,
     title: "Understanding Before Building",
-    description: "Carefully analyzing project goals, business needs, and user expectations to create a clear development direction before starting the work.",
-    // Business strategy / planning image
-    bgImage: "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&w=1800&q=100"
+    description: "Every successful project starts with a clear understanding of the goals and requirements. I take time to analyze the client’s vision, target audience, business needs, and project expectations before writing a single line of code. This helps create a strong foundation and ensures the final product aligns perfectly with the intended purpose.",
   },
   {
     id: 2,
     title: "Researching with Purpose",
-    description: "Exploring design trends, user behavior, and project requirements to plan a modern, effective, and goal-driven solution.",
-    // Research / UX design trends image
-    bgImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
+    description: "Before moving into design and development, I conduct research to understand modern design trends, user expectations, competitor approaches, and the best technical solutions for the project. This process helps in making informed decisions that improve both the visual appeal and functionality of the website.",
   },
   {
     id: 3,
     title: "Structuring the User Experience",
-    description: "Creating clean layouts and intuitive interface structures that improve usability, visual hierarchy, and overall user interaction.",
-    // Wireframing / UI structure image
-    bgImage: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=1800&q=100"
+    description: "A well-structured interface creates a better user experience. I focus on organizing layouts, content flow, spacing, and navigation in a way that feels intuitive and engaging. The goal is to create clean, user-friendly interfaces that not only look modern but also improve usability and interaction.",
   },
   {
     id: 4,
     title: "Developing Responsive Experiences",
-    description: "Transforming designs into fast, responsive, and interactive websites using modern frontend technologies and clean code practices.",
-    // Coding / Web development image
-    bgImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1800&q=100"
+    description: "Using modern frontend technologies, I transform designs into fully responsive and interactive web experiences. I focus on writing clean, maintainable code while ensuring the website works smoothly across desktops, tablets, and mobile devices with consistent performance and visual quality.",
   },
   {
     id: 5,
     title: "Refining for Performance & Quality",
-    description: "Testing across devices and optimizing performance, responsiveness, accessibility, and smooth user experience for a polished final product.",
-    // Code optimization / testing image
-    bgImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=100"
+    description: "Quality goes beyond appearance. I carefully test the project across different screen sizes and browsers while optimizing performance, responsiveness, accessibility, and smooth interactions. This process helps deliver a polished, reliable, and professional final product.",
   },
   {
     id: 6,
     title: "Launching with Confidence",
-    description: "Finalizing, reviewing, and deploying the project with attention to quality, functionality, and seamless user experience.",
-    // Rocket / Launch / Success celebration image
-    bgImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1800&q=100"
+    description: "Before deployment, I perform final reviews and refinements to ensure everything functions as expected. From responsiveness to overall user experience, every detail is checked carefully so the website is ready for a smooth and confident launch.",
   }
 ];
 
-function ToolFlipCard({ card }) {
+const silkCards = [
+  {
+    title: "Modern & User-Focused Interfaces",
+    description: "I combine clean design principles with intuitive user experiences to create interfaces that are visually appealing, easy to navigate, and aligned with modern web standards.",
+    rotation: 0,
+  },
+  {
+    title: "Commitment to Quality",
+    description: "I prioritize quality in every stage of development, delivering solutions that are reliable, professional, and built to meet project goals effectively.",
+    rotation: 5,
+    alignEnd: true,
+  },
+  {
+    title: "Reliable Delivery",
+    description: "Meeting deadlines is a key part of my work ethic. I manage projects efficiently to ensure timely delivery without compromising quality.",
+    rotation: 5,
+  },
+  {
+    title: "Focused on Long-Term Value",
+    description: "My goal is not just to build a website but to create a digital experience that supports your business objectives and provides lasting value.",
+    rotation: 0,
+    alignEnd: true,
+  },
+]
+
+function SilkValueCard({ card }) {
   return (
-    <div className="group h-[500px] [perspective:1200px]">
-      <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-        <div className="absolute inset-0 overflow-hidden bg-black [backface-visibility:hidden]">
-          <StarsBackground className="absolute inset-0 z-0" pointerEvents={false} />
-          <div className="relative z-10 p-6">
-            <p className="mb-5 text-[1.5rem] font-medium tracking-tighter text-white">{card.title}</p>
-            <p className="text-[1.3rem] tracking-tighter text-white/65">
-              {card.description}
-            </p>
-          </div>
-
-          <div className="pointer-events-none absolute bottom-6 right-6 z-10 flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-white shadow-[0_0_35px_rgba(255,255,255,0.12)] backdrop-blur-md transition duration-500 group-hover:scale-90 group-hover:opacity-0">
-            <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white text-black">
-              <span className="absolute inset-0 rounded-full border border-white/60 [animation:ping_1.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
-              <Rotate3D className="relative h-5 w-5 [animation:spin_3s_linear_infinite]" strokeWidth={1.8} />
-            </span>
-            <span className="text-[0.85rem] font-medium uppercase tracking-[0.18em] text-white/85">
-              Hover
-            </span>
-          </div>
-        </div>
-
-        <div className="absolute inset-0 overflow-hidden bg-black text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <StarsBackground className="absolute inset-0 z-0" pointerEvents={false} />
-          <div className="relative z-10 flex h-full flex-col gap-3 p-10">
-            {card.skills.map(skill => (
-              <p key={skill} className="text-[1.3rem] leading-tight tracking-tighter text-white">
-                {skill}
-              </p>
-            ))}
-          </div>
-        </div>
+    <div className={`relative h-[350px] overflow-hidden bg-black p-6 ${card.alignEnd ? 'flex flex-col justify-end' : ''}`}>
+      <div className="absolute inset-0 z-0">
+        <Silk
+          speed={2}
+          scale={1}
+          color="#5227FF"
+          noiseIntensity={0}
+          rotation={card.rotation}
+        />
       </div>
+      <p className="relative z-10 mb-5 max-w-[25rem] text-[3rem] font-bold leading-[0.9] tracking-tighter text-white mix-blend-difference">
+        {card.title}
+      </p>
+      <p className="relative z-10 text-[1.3rem] leading-[0.9] tracking-tighter text-white mix-blend-difference">
+        {card.description}
+      </p>
     </div>
   )
 }
 
 function About() {
+  const processSectionRef = useRef(null);
+  const scrollFrameRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [processProgress, setProcessProgress] = useState(0);
+  const [viewportSize, setViewportSize] = useState({ width: 500, height: 500 });
+
+  useEffect(() => {
+    const clamp = (value) => Math.min(Math.max(value, 0), 1);
+
+    const updateScrollState = () => {
+      const scaleSection = document.getElementById('zoom-container-section');
+      const processSection = processSectionRef.current;
+
+      if (processSection) {
+        const rect = processSection.getBoundingClientRect();
+        const totalScrollableDistance = processSection.offsetHeight - window.innerHeight;
+        
+        if (rect.top <= 0) {
+          const progress = totalScrollableDistance > 0 ? clamp(-rect.top / totalScrollableDistance) : 0;
+          setProcessProgress(progress);
+        } else {
+          setProcessProgress(0);
+        }
+      }
+
+      if (!scaleSection) return;
+
+      const rect = scaleSection.getBoundingClientRect();
+      const totalScrollableDistance = scaleSection.offsetHeight - window.innerHeight;
+
+      if (-rect.top >= 0 && totalScrollableDistance > 0) {
+        const progress = clamp(-rect.top / totalScrollableDistance);
+        setScrollProgress(progress);
+      } else if (rect.top > 0) {
+        setScrollProgress(0);
+      }
+    };
+
+    const handleScroll = () => {
+      if (scrollFrameRef.current !== null) return;
+
+      scrollFrameRef.current = window.requestAnimationFrame(() => {
+        scrollFrameRef.current = null;
+        updateScrollState();
+      });
+    };
+
+    const handleResize = () => {
+      setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+      updateScrollState();
+    };
+
+    handleResize();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+    return () => {
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+      }
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const currentWidth = 500 + (viewportSize.width - 500) * scrollProgress;
+  const currentHeight = 500 + (viewportSize.height - 500) * scrollProgress;
+  const stepCount = lifecycleSteps.length;
+  const processTrackHeight = `${stepCount * 120}vh`;
+
   return (
     <div id="about" className="bg-black">
-      <section className="relative min-h-screen w-full overflow-hidden bg-black px-10 py-10 text-white md:px-16 flex items-center">
+      {/* SECTION 1: HERO */}
+      <section className="relative flex min-h-screen w-full items-center overflow-hidden bg-black px-10 py-10 text-white md:px-16 sticky top-0">
         <div className="absolute inset-0 z-0">
           <ColorBends
             colors={["#2802FF", "#1A00B0", "#130080"]}
@@ -132,60 +179,148 @@ function About() {
         </div>
 
         <div>
-          <p className='text-[2rem] font-semibold text-[#FFDD00] tracking-tighter mb-5 mix-blend-difference'>#WhereQualityMeetsCommitment</p>
           <p className="text-[8vw] md:text-[8vw] font-bold leading-[0.8] tracking-tighter text-white mb-5 mix-blend-difference">SanthoshKumar MuraliDharan</p>
           <p className="text-[1.5rem] font-medium tracking-tighter text-white mb-5 mix-blend-difference">Frontend Developer . Specialized in Producing Quality Output</p>
           <p className='text-[1.3rem] tracking-tighter text-white w-100 mb-5 mix-blend-difference'>I design and develop responsive frontend experiences that help businesses build trust and convert visitors into customers.</p>
         </div>
       </section>
 
-      <section className='relative min-h-screen w-full overflow-hidden bg-white px-10 py-10 text-white md:px-16'>
-        <div className='grid justify-items-center mb-10'>
-          <p className='text-[2rem] font-semibold text-black tracking-tighter mb-5'>The Person Behind the Pixels</p>
-          <p className='text-[1.3rem] text-black/65 tracking-tighter text-center'>I started my journey with UI/UX design and gradually moved into frontend development to bring interfaces to life through clean code and smooth user experiences. I enjoy transforming ideas into responsive and interactive websites that are both visually appealing and performance optimized</p>
+      {/* SECTION 2: PROCESS TIMELINE */}
+      <section className='relative w-full bg-white text-white z-10'>
+        <div className='px-10 pt-20 pb-10 md:px-16'>
+          <div className='grid justify-items-center mb-10'>
+            <p className='text-[2rem] font-semibold text-black tracking-tighter mb-5'>The Person Behind the Pixels</p>
+            <p className='max-w-[55rem] text-[1.3rem] text-black/65 tracking-tighter text-center'>I started my journey with UI/UX design and gradually moved into frontend development to bring interfaces to life through clean code and smooth user experiences. I enjoy transforming ideas into responsive and interactive websites that are both visually appealing and performance optimized</p>
+          </div>
+
+          <p className='text-[2rem] font-semibold text-black tracking-tighter mb-5 text-center mt-20'>How Your Project Comes to Life</p>
+          <p className='mx-auto max-w-[50rem] text-[1.3rem] text-black/65 tracking-tighter text-center'>
+            Every project follows a structured and detail-focused process designed to transform ideas into modern, responsive, and high-quality web experiences. From understanding requirements to final deployment, each step is carefully planned to ensure clarity, performance, and a seamless user experience.
+          </p>
         </div>
 
-        <div>
-          <p className='text-[2rem] font-semibold text-black tracking-tighter mb-5 text-center'>Tools Behind the Build</p>
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-            {toolCards.map(card => (
-              <ToolFlipCard key={card.title} card={card} />
-            ))}
+        <div
+          ref={processSectionRef}
+          className="relative w-full"
+          style={{ height: processTrackHeight }}
+        >
+          <div className="sticky top-0 h-screen w-full overflow-hidden bg-white flex items-center">
+            <div className="absolute left-6 top-1/2 z-20 hidden h-[60vh] -translate-y-1/2 md:left-12 lg:left-16 md:block">
+              <div className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-black/15" />
+              <div
+                className="absolute left-1/2 top-0 w-[2px] -translate-x-1/2 bg-[#ffd400] transition-[height] duration-75 ease-out"
+                style={{ height: `${processProgress * 100}%` }}
+              />
+
+              {lifecycleSteps.map((step, index) => {
+                const dotProgress = stepCount === 1 ? 1 : index / (stepCount - 1);
+                const isComplete = processProgress >= (dotProgress - 0.02);
+
+                return (
+                  <div
+                    key={step.id}
+                    className={`absolute left-1/2 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 transition-all duration-300 ${isComplete ? 'bg-[#ffd400] border-[#ffd400]' : 'bg-white border-black/40'}`}
+                    style={{ top: `${dotProgress * 100}%` }}
+                  >
+                    {isComplete ? (
+                      <Check className="h-4 w-4 text-black" strokeWidth={3} />
+                    ) : (
+                      <span className="text-[0.75rem] font-bold text-black/60">{step.id}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="w-full h-full relative">
+              {lifecycleSteps.map((step, index) => {
+                const isReversed = index % 2 === 1;
+                
+                const stepRange = 1 / stepCount;
+                const stepStart = index * stepRange;
+                const stepEnd = stepStart + stepRange;
+                
+                let opacity = 0;
+                let transformY = 'translateY(40px)';
+                
+                if (processProgress >= stepStart && processProgress <= stepEnd) {
+                  opacity = 1;
+                  transformY = 'translateY(0px)';
+                } else if (processProgress > stepEnd && index < stepCount - 1) {
+                  opacity = 0;
+                  transformY = 'translateY(-40px)';
+                }
+
+                return (
+                  <div
+                    key={step.id}
+                    className="absolute inset-0 flex h-full w-full items-center px-10 md:pl-32 lg:pl-40 pr-10 transition-all duration-500 ease-out pointer-events-none"
+                    style={{ 
+                      opacity: opacity,
+                      transform: transformY,
+                      pointerEvents: opacity > 0 ? 'auto' : 'none'
+                    }}
+                  >
+                    <div className={`grid w-full items-center gap-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-16 ${isReversed ? 'lg:grid-cols-[minmax(0,1fr)_340px]' : ''}`}>
+                      
+                      <div className={`relative flex h-[300px] w-full max-w-[340px] overflow-hidden bg-black text-white md:h-[340px] ${isReversed ? 'lg:order-2 lg:justify-self-end' : ''}`}>
+                        <StarsBackground className="absolute inset-0 z-0" pointerEvents={false} />
+                        <span className="absolute -right-1 -top-2 z-10 select-none text-[4.5rem] font-extrabold leading-none text-white mix-blend-difference md:text-[5.5rem]">{step.id}</span>
+                        <p className='relative z-10 place-self-end p-4 text-[2.2rem] font-semibold leading-[0.95] tracking-tighter mix-blend-difference md:text-[2.5rem]'>{step.title}</p>
+                      </div>
+
+                      <p className={`max-w-[52rem] text-[1.3rem] leading-relaxed tracking-tighter text-black/65 ${isReversed ? 'lg:order-1 lg:justify-self-end lg:text-right' : ''}`}>
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </div>
       </section>
 
-      <section className="w-full bg-white px-10 py-10 font-sans md:px-16">
-        <h2 className="mb-5 text-center text-[2rem] font-semibold tracking-tighter text-black">
-          How Your Project Comes to Life
-        </h2>
+      {/* SECTION 3: CRITICAL TRANSITION TRACK */}
+      <section 
+        id="zoom-container-section" 
+        className="relative h-[250vh] bg-white z-20"
+      >
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+          <div 
+            style={{
+              width: `${currentWidth}px`,
+              height: `${currentHeight}px`,
+              borderRadius: '0px'
+            }}
+            className="bg-black flex items-center justify-center text-white relative overflow-hidden transition-all duration-75 ease-out"
+          >
+            <img
+              src={darkThemeImage}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/45" />
+            <p className='relative z-10 text-[2rem] font-bold tracking-tighter text-center px-6 whitespace-nowrap mix-blend-difference'>
+              #WhereQualityMeetsCommitment
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <div className="space-y-4">
-          {lifecycleSteps.map((step) => (
-            <div
-              key={step.id}
-              className="group relative flex min-h-[260px] w-full overflow-hidden bg-black p-4 shadow-sm transition-transform duration-300 hover:shadow-md md:aspect-[1628/340] md:min-h-0"
-            >
-              <img
-                src={step.bgImage}
-                alt=""
-                className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
+      {/* SECTION 4: WHY WORK WITH ME */}
+      <section className='relative min-h-screen w-full overflow-hidden bg-black px-10 pb-10 pt-30 text-white md:px-16 z-30 shadow-[0_-20px_50px_rgba(0,0,0,0.9)]'>
+        <div className="mb-20 grid justify-items-center">
+          <p className='mb-5 text-center text-[2rem] font-semibold tracking-tighter text-white'>Why Work With Me?</p>
+          <p className='max-w-[50rem] text-center text-[1.3rem] tracking-tighter text-white/65'>
+            I believe successful projects are built on quality, communication, and attention to detail. By combining modern development practices with a client-focused approach, I deliver web experiences that are responsive, reliable, and designed to create real impact. Every project receives the same level of dedication, commitment, and focus on excellence from start to finish.
+          </p>
+        </div>
 
-              <span className="absolute -right-2 -top-3 z-10 select-none text-[4.5rem] font-extrabold leading-none text-white mix-blend-difference md:text-[5.5rem]">
-                {step.id}
-              </span>
-
-              <div className="relative z-20 flex h-full max-w-[88%] flex-col justify-between text-white mix-blend-difference md:max-w-[75%]">
-                <h3 className="max-w-[18rem] font-medium leading-[0.95] tracking-tighter text-[1.5rem]">
-                  {step.title}
-                </h3>
-                <p className="leading-tight tracking-tighter text-[1.3rem]">
-                  {step.description}
-                </p>
-              </div>
-            </div>
+        <div className='grid grid-cols-1 md:grid-cols-2'>
+          {silkCards.map((card) => (
+            <SilkValueCard key={card.title} card={card} />
           ))}
         </div>
       </section>
