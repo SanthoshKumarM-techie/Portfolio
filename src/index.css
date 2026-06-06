@@ -6,6 +6,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 *,
@@ -17,4 +18,22 @@ html {
 body {
   margin: 0;
   font-family: inherit;
+  -ms-overflow-style: none;
+}
+
+.staggered-menu-header {
+  color: #ffffff !important;
+  isolation: auto !important;
+  mix-blend-mode: difference !important;
+  z-index: 2147483647 !important;
+}
+
+.staggered-menu-header .sm-logo,
+.staggered-menu-header .sm-toggle {
+  color: #ffffff !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }

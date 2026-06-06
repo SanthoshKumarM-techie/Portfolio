@@ -5,8 +5,9 @@ import SCBG1 from './assets/SCBG1.jpg'
 import SCBG2 from './assets/SCBG2.jpg'
 import SCBG3 from './assets/SCBG3.jpg'
 import code from './assets/code.jpg'
-import CTA from './CTA';
+import CTA from './QuickLinks';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import QuickLinks from './QuickLinks';
 
 function HomeBrief() {
   const projects = [
@@ -164,7 +165,7 @@ function HomeBrief() {
   const renderTestimonialCard = (item, key) => (
     <motion.div 
       key={key}
-      className="testimonial-card relative h-100 w-85 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-black select-none cursor-pointer"
+      className="testimonial-card relative h-100 w-85 shrink-0 overflow-hidden rounded-lg border border-white/10 select-none cursor-pointer"
       whileHover={{ 
         scale: 1.04, 
         y: -8, 
@@ -173,9 +174,8 @@ function HomeBrief() {
       }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
-      <div className="absolute inset-0 testimonial-stars" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(83,56,255,0.55),transparent_36%),linear-gradient(155deg,rgba(38,0,191,0.85),rgba(0,0,0,0.18)_48%,rgba(0,0,0,0.78))]" />
-      <div className="absolute inset-0 bg-black/10" />
+      {/* Solid, Deep Premium Violet and Blue Gradient Background Layer */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2e0854] via-[#110038] to-[#0d1b3e]" />
 
       <div className="relative z-10 flex h-full flex-col justify-between">
         <div className="p-5 pb-0">
@@ -487,44 +487,6 @@ function HomeBrief() {
              .testimonial-card {
                contain: layout paint;
              }
-             @keyframes testimonial-star-drift {
-               0% {
-                 background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
-               }
-               100% {
-                 background-position: 72px -144px, -96px -192px, 118px -236px, -84px -168px, 132px -264px, 0 0;
-               }
-             }
-             @keyframes testimonial-star-twinkle {
-               0%, 100% { opacity: 0.22; transform: translate3d(0, 0, 0) scale(1); }
-               50% { opacity: 0.68; transform: translate3d(10px, -14px, 0) scale(1.04); }
-             }
-             .testimonial-stars {
-               background-image:
-                 radial-gradient(circle at 14% 18%, rgba(255,255,255,0.95) 0 1px, transparent 1.4px),
-                 radial-gradient(circle at 72% 22%, rgba(255,255,255,0.75) 0 1px, transparent 1.5px),
-                 radial-gradient(circle at 42% 62%, rgba(255,255,255,0.8) 0 1px, transparent 1.5px),
-                 radial-gradient(circle at 84% 74%, rgba(255,255,255,0.65) 0 1px, transparent 1.5px),
-                 radial-gradient(circle at 26% 82%, rgba(255,255,255,0.7) 0 1px, transparent 1.5px),
-                 radial-gradient(ellipse at bottom, #262626 0%, #000 72%);
-               background-size: 72px 72px, 96px 96px, 118px 118px, 84px 84px, 132px 132px, 100% 100%;
-               opacity: 0.95;
-               animation: testimonial-star-drift 26s linear infinite;
-               will-change: background-position;
-             }
-             .testimonial-stars::after {
-               content: "";
-               position: absolute;
-               inset: 0;
-               background-image:
-                 radial-gradient(circle at 18% 28%, rgba(255,255,255,0.95) 0 1.5px, transparent 2px),
-                 radial-gradient(circle at 58% 14%, rgba(255,255,255,0.8) 0 1px, transparent 1.7px),
-                 radial-gradient(circle at 78% 58%, rgba(255,255,255,0.9) 0 1.4px, transparent 2px),
-                 radial-gradient(circle at 35% 76%, rgba(255,255,255,0.75) 0 1px, transparent 1.8px);
-               background-size: 160px 160px, 132px 132px, 190px 190px, 145px 145px;
-               animation: testimonial-star-twinkle 4.8s ease-in-out infinite;
-               pointer-events: none;
-             }
            `}} />
 
            {/* Infinite Scroller Track Box */}
@@ -536,7 +498,7 @@ function HomeBrief() {
          </motion.div>
       </section>
       
-      <section className="w-full bg-[#f6f6f6] text-black px-5 py-10 md:px-10 overflow-hidden select-none">
+      <section className="w-full bg-white text-black px-5 py-10 md:px-10 overflow-hidden select-none">
       <div className="mx-auto max-w-5xl">
 
         {/* Main Editorial Layout Grid */}
@@ -608,6 +570,8 @@ function HomeBrief() {
 
       </div>
     </section>
+
+    <QuickLinks />
     </div>
   )
 }

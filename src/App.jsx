@@ -1,11 +1,12 @@
 import React from 'react'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import Home from './Home'
 import HomeBrief from './HomeBrief'
 import About from './About'
 import StaggeredMenu from './components/StaggeredMenu'
 import Projects from './Projects'
 import Services from './Services'
-import CTA from './CTA'
+import CTA from './QuickLinks'
 
 const menuItems = [
   { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
@@ -21,6 +22,13 @@ const socialItems = [
 ]
 
 function App() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001
+  })
+
   const currentPath = window.location.pathname.replace(/\/$/, '') || '/'
 
   const pages = {
@@ -39,6 +47,13 @@ function App() {
 
   return (
     <div>
+      <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
+        <motion.div
+          className="h-full origin-left bg-[#5227FF] shadow-[0_0_18px_rgba(82,39,255,0.45)]"
+          style={{ scaleX }}
+        />
+      </div>
+
       <StaggeredMenu
         position="right"
         items={menuItems}
@@ -46,8 +61,8 @@ function App() {
         displaySocials
         displayItemNumbering
         menuButtonColor="#ffffff"
-        openMenuButtonColor="#111111"
-        changeMenuColorOnOpen
+        openMenuButtonColor="#ffffff"
+        changeMenuColorOnOpen={false}
         colors={['#B497CF', '#5227FF']}
         logoText="Santhoshkumar"
         accentColor="#5227FF"
